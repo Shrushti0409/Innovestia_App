@@ -1,0 +1,12 @@
+import {Router} from 'express';
+import {authenticate} from '../middleware/auth.js';
+import * as resource from '../controllers/resourceController.js';
+import {asyncHandler} from '../middleware/errors.js';
+import express from 'express';
+const router = Router(); router.use(authenticate);
+router.get('/dashboard', asyncHandler(resource.dashboardSummary));
+router.get('/profiles', asyncHandler(resource.listProfiles)); router.get('/profiles/me', asyncHandler(resource.myProfile)); router.put('/profiles/me', asyncHandler(resource.updateProfile)); router.get('/profiles/saved', asyncHandler(resource.savedProfiles)); router.put('/profiles/:profileId/saved', asyncHandler(resource.saveProfile)); router.delete('/profiles/:profileId/saved', asyncHandler(resource.unsaveProfile));
+router.put('/profiles/me/pitch-deck', express.raw({type:'application/pdf',limit:'10mb'}), asyncHandler(resource.uploadPitchDeck)); router.delete('/profiles/me/pitch-deck', asyncHandler(resource.deletePitchDeck)); router.get('/profiles/:profileId/pitch-deck', asyncHandler(resource.downloadPitchDeck));
+router.post('/startups/:startupId/interests', asyncHandler(resource.createInterest)); router.get('/investment-requests', asyncHandler(resource.listRequests)); router.put('/investment-requests/:id', asyncHandler(resource.updateRequest));
+router.get('/chat/users', asyncHandler(resource.searchChatUsers)); router.post('/conversations', asyncHandler(resource.startConversation)); router.get('/conversations', asyncHandler(resource.listConversations)); router.get('/conversations/:id/messages', asyncHandler(resource.messages)); router.post('/conversations/:id/messages', asyncHandler(resource.sendMessage));
+router.get('/notifications', asyncHandler(resource.notifications)); router.get('/notifications/unread-count', asyncHandler(resource.unreadCount)); router.put('/notifications/read-all', asyncHandler(resource.readAll)); router.put('/notifications/:id/read', asyncHandler(resource.readNotification)); export default router;

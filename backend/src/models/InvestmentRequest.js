@@ -1,0 +1,2 @@
+import mongoose from 'mongoose';
+const schema = new mongoose.Schema({startup: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true}, investor: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true}, message: {type: String, maxlength: 1000}, status: {type: String, enum: ['PENDING', 'ACCEPTED', 'REJECTED', 'WITHDRAWN'], default: 'PENDING'}}, {timestamps: true}); schema.index({startup: 1, investor: 1, status: 1}); export default mongoose.model('InvestmentRequest', schema);
